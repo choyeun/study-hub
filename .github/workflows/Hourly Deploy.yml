@@ -1,22 +1,16 @@
-name: Update Submodule and Deploy
+name: Hourly Deploy
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - Research/**
-  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'  # 매 정시(0분)에 실행
 
 jobs:
-  update-submodule:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout study-hub repository
+      - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          submodules: recursive  # 서브모듈도 함께 체크아웃
 
       - name: Set up Git user
         run: |
@@ -37,7 +31,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Deploy the Site
+      - name: Run Ready Script
+        run: npm run ready
+
+      - name: Run Deploy Script
         run: npm run deploy
         env:
           GIT_USER: choyeun

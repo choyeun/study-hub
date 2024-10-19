@@ -1,39 +1,37 @@
-name: Deploy on Study Update
+name: Update Submodule and Deploy
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 * * * *'
   push:
     branches:
       - main
     paths:
-      - '.gitmodules'
+      - Research/**
 
 jobs:
-  update-submodule-and-deploy:
+  update-submodule:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout study-hub repository
         uses: actions/checkout@v3
         with:
-          submodules: true
+          submodules: recursive  # 서브모듈도 포함해서 체크아웃
 
-      - name: Update Submodule to Latest Commit
-        run: git submodule foreach git pull origin main --rebase
+      - name: Ensure Submodules are Up-to-Date
+        run: |
+          git submodule update --init --recursive
 
-      - name: Commit Submodule Update
+      - name: Commit Updated Submodule
         run: |
           git add .
-          git commit -m "Update submodule to latest commit"
+          git commit -m "Update submodule to latest local commit"
           git push
 
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Deploy
+      - name: Deploy the Site
         run: npm run deploy
         env:
           GIT_USER: choyeun
-          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+          GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}

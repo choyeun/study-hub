@@ -30,23 +30,6 @@ jobs:
           git add Research
           git commit -m "Update submodule to latest local commit" || echo "No changes to commit"
           git push || echo "Nothing to push"
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Run Ready Script
-        run: npm run ready
-
-      - name: Run Deploy Script
-        run: npm run deploy
-        env:
-          GIT_USER: choyeun
-
-      - name: Commit and Push Updates
-        run: |
-          git add .
-          git commit -m "Update submodule to latest local commit" || echo "No changes to commit"
-          git push
         env:
           GIT_USER: choyeun
           GITHUB_TOKEN: ${{ secrets.PAT }}  # 푸시할 때도 토큰 사용

@@ -3,6 +3,7 @@ name: Hourly Deploy
 on:
   schedule:
     - cron: '0 * * * *'  # 매 정시(0분)에 실행
+  workflow_dispatch:  # 수동 실행 가능
 
 jobs:
   deploy:

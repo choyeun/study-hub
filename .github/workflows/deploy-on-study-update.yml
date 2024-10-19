@@ -18,9 +18,13 @@ jobs:
         with:
           submodules: recursive  # 서브모듈도 포함해서 체크아웃
 
-      - name: Ensure Submodules are Up-to-Date
+      - name: Set up Git user
         run: |
-          git submodule update --init --recursive
+          git config --global user.name "choyeun"
+          git config --global user.email "choyeun0372@gmail.com"
+
+      - name: Update Submodule to Latest Commit
+        run: git submodule update --init --recursive
 
       - name: Commit Updated Submodule
         run: |
